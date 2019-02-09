@@ -68,23 +68,4 @@ subtest {
     is time - $before-time, (1|2), "{time} - $before-time";
 }
 
-subtest {
-    use v6.d.PREVIEW;
-    plan 3;
-    $*SCHEDULER = mock-time;
-    my $p2 = Promise.new;
-    my $p = start {
-        my $start = now;
-        pass "before";
-        $p2.keep;
-        sleep 50;
-        pass "after";
-        cmp-ok now - $start, ">=", 50;
-    }
-
-    await $p2;
-    $*SCHEDULER.advance-by: 50;
-    await $p;
-}
-
 done-testing
